@@ -36,5 +36,25 @@ struct pointInfo
 
 };
 ~~~
-For struct pointInfo, I would like to say ??? 
-Position 
+For struct pointInfo and position, I would like to say they the same thing. We just want to change the name only to avoid confusion. However, the struct in pointInfo is unnecessary
+
+If apporved by team, we will change the struct "position" to other name
+
+For your reference, there is an example of nested struct:
+~~~
+struct Employee
+{
+    short id;
+    int age;
+    double wage;
+};
+ 
+struct Company
+{
+    Employee CEO; // Employee is a struct within the Company struct
+    int numberOfEmployees;
+};
+ 
+Company myCompany;
+~~~
+The hierarchy: Position = pointInfo < points = targetPos
