@@ -26,10 +26,15 @@ while(True):
   print()
 ~~~
 theta_margin = 25, merge lines that are within 25 degrees
+
 rho_margin = 25, merge lines that are within 25 raw pixels, Related to Hough transform
+
 The format of l is x1, y1, x2, y2, length, 
+
 magnitude: sum of the magnitude of all merge lines
+
 theta: angle of the line
+
 rho: real value
 
 ## Transmit data from openmv to stm32
