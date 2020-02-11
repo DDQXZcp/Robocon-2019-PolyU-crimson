@@ -58,3 +58,6 @@ struct Company
 Company myCompany;
 ~~~
 The hierarchy: Position = pointInfo < points = targetPos
+
+## Slave board
+
