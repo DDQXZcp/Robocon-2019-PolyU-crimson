@@ -61,3 +61,96 @@ The hierarchy: Position = pointInfo < points = targetPos
 
 ## Slave board
 
+## Manual mode
+
+in main.cpp
+~~~
+if(autoMode == false)
+        motor.manual();
+~~~
+
+in main.h
+
+Headings for manual mode
+~~~
+#include "ActionEncoder.h"
+#include "DebugClass.h"
+#include "Motor.h"
+#include "SlaveBoard.h"
+
+// Heading for manual mode
+#include "pinDefind.h"
+#include "PS4_serial.h"
+~~~
+parameters for manual mode
+~~~
+// manual mode
+float joy_range_mid = 128;
+float joy_range = 1; //15
+float linear_speed = 2;
+float angular_speed = 2;
+float vt = 0 ;
+float vnt = 0 ;
+float wt = 0 ;
+~~~
+
+in motor.cpp
+
+we found
+~~~
+void Motor::manual(){
+    SET_P_ACCELERATION(1, 99999);
+    SET_P_ACCELERATION(2, 99999);
+    SET_P_ACCELERATION(3, 99999);
+    SET_P_ACCELERATION(4, 99999);
+
+    SET_P_DECELERATION(1, 99999);
+    SET_P_DECELERATION(2, 99999);
+    SET_P_DECELERATION(3, 99999);
+    SET_P_DECELERATION(4, 99999);
+
+    SET_QUICK_STOP_DECELERATION(1, 99999);
+    SET_QUICK_STOP_DECELERATION(2, 99999);
+    SET_QUICK_STOP_DECELERATION(3, 99999);
+    SET_QUICK_STOP_DECELERATION(4, 99999);
+}
+~~~
+There are a class called Motor and function manual()
+
+And three setting functions: SET_P_ACCELERATION, SET_P_DECELERATION and SET_QUICK_STOP_DECELERATION for four wheels
+
+in robot.h
+
+~~~
+#include "mbed.h"
+//#include "LED.h"
+#include "CANOpen.h"
+#include "motion.h"
+~~~
+
+in motion.cpp
+
+~~~
+bool SET_P_ACCELERATION(uint8_t node_num, uint32_t data)
+{
+    if(!SDO_EXE(node_num,0x83,0x60,0x00,data,4)){; return 0;}
+    //PC_SEND("SET PROFILE ACCELERATION: %d\n", data);
+    return 1;
+}
+~~~
+~~~
+bool SET_P_DECELERATION(uint8_t node_num, uint32_t data)
+{
+    if(!SDO_EXE(node_num,0x84,0x60,0x00,data,4)){; return 0;}
+    //PC_SEND("SET PROFILE DECELERATION: %d\n", data);
+    return 1;
+}
+~~~
+~~~
+bool SET_QUICK_STOP_DECELERATION(uint8_t node_num, uint32_t data)
+{
+    if(!SDO_EXE(node_num,0x85,0x60,0x00,data,4)){; return 0;}
+    //PC_SEND("SET QUICK STOP DECELERATION: %d\n", data);
+    return 1;
+}
+~~~
