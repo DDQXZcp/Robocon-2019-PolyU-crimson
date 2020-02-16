@@ -449,5 +449,3 @@ bool SYNC_QUICK_STOP_HOMING(uint8_t node_num)
 
 
 
-
-

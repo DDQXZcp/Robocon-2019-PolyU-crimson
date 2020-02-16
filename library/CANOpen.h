@@ -119,5 +119,3 @@ void buffer_append_int32(uint8_t* buffer, int32_t number, int32_t *index);
 
 
 
-
-
