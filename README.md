@@ -230,4 +230,4 @@ lass Motor {
         static const int maxPVelocity = 8700;
 };
 ~~~
-maxPVelocity = 8700, it is a key that needs to modify in actual use
+maxPVelocity = 8700, it is a key parameter that needs to modify in actual use
