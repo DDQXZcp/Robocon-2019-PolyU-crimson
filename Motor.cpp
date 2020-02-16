@@ -1,5 +1,7 @@
 #include "Motor.h"
 
+Serial pc(PA_2, PA_3, 115200);
+
 Motor::Motor(){
     init();
 }
@@ -9,10 +11,12 @@ void Motor::init() {
     CANOpen_SETUP(1000000, 0.1);
     wait(1.0);
     STOP_SYNC();
+    pc.printf("Going to CLEAR_FAULT");
     SDO_CW(1, CLEAR_FAULT);
     SDO_CW(2, CLEAR_FAULT);
     SDO_CW(3, CLEAR_FAULT);
     SDO_CW(4, CLEAR_FAULT);
+    pc.printf("FAULT CLEARED.");
     SET_NMT(RESET_COMMU);
     wait(0.01);
 
@@ -89,6 +93,7 @@ void Motor::init() {
     SDO_CW(2, SWITCH_ON_ENABLE_OP);
     SDO_CW(3, SWITCH_ON_ENABLE_OP);
     SDO_CW(4, SWITCH_ON_ENABLE_OP);
+    pc.printf("SDO Complete");
     //wait(2);    
 }
 
@@ -133,9 +138,6 @@ int Motor::getMaxPVelocity()
 {
     return maxPVelocity;
 }
-
-
-
 
 
 

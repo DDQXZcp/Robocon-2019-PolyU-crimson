@@ -7,8 +7,10 @@
 #include "pinDefind.h"
 #include "PS4_serial.h"
 
+
+
 //Robot components
-DebugClass pc(USBTX, USBRX); //UART_2 (USBTX, USBRX = PA_9, PA_10)
+//DebugClass pc(USBTX, USBRX); //UART_2 (USBTX, USBRX = PA_9, PA_10)
 SlaveBoard slave (PA_9, PA_10); //UART_1  //(PA_0, PA_1); //UART_4 for 446 only
 Motor motor;
 ActionEncoder action(PC_10, PC_11); //UART_3
@@ -17,6 +19,7 @@ DigitalOut led(LED1);
 
 // Ticker
 Ticker motorUpdateTicker;
+//Ticker odom_updater;
 
 // Constants
 const float UPDATE_RATE = 0.08;//0.08;
@@ -29,13 +32,11 @@ float gear = GEAR_RATIO;
 //float radian_to_rpm_convert = (RAD_TO_DEG / 360) * 60 * gear;
 float radian_to_rpm_convert = (1/((2*PI)/60)) * gear * 2;
 float r = action.getR();
-double maximunSpeed = 1.2;
-double reduceSpeed = 0.2;
 
 // Robot Positioning
 int targetPoint = 0;
 int maxPointCount = 0; // will be replaced in initPath
-struct pointInfo points[2000];
+struct pointInfo points[100];
 struct position localVelocity = {.x = 0, .y = 0, .w = 0}, globalVelocity = {.x = 0, .y = 0, .w = 0}, curPos = {.x = 0, .y = 0, .w = 0};
 struct position lastError = {.x = 0, .y = 0, .w = 0}; // For PID_D
 struct position targetPos = {
@@ -53,7 +54,13 @@ struct position maxSpeed = {
     .y = 1,
     .w = 1
 };
-Command command;
+bool pidOn = points[0].pidOn;
+Command command = points[0].command;
+
+// PID
+struct position PID_P = {.x = 2.75, .y = 2.75, .w = 2.5};
+struct position PID_I = {.x = 0, .y = 0, .w = 0};
+struct position PID_D = {.x = 0.75, .y = 0.75, .w = 0};
 
 // Motor
 int motor1 = 0;
@@ -69,11 +76,6 @@ Timer buttonBlock;
 int blockTime = 100; // Block for 500 ms
 bool firstPress = true;
 
-//Timer for odom
-Timer odomTimer; //for odom_purposes.
-double odomTime = 0;
-bool firstRun = true;
-
 // manual mode
 float joy_range_mid = 128;
 float joy_range = 1; //15
@@ -82,5 +84,3 @@ float angular_speed = 2;
 float vt = 0 ;
 float vnt = 0 ;
 float wt = 0 ;
-
-

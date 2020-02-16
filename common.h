@@ -29,12 +29,10 @@ enum Command {noAction, homing, readyPosition, fire, VESC, toggleVG};
 
 struct pointInfo
 {
-   struct position targetPos;
-
+   struct position targetPos, tolerance, maxSpeed;
+   bool pidOn;
+   Command command;
 };
-
-
-
 
 
 

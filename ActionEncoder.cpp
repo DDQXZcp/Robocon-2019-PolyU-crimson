@@ -158,6 +158,3 @@ float ActionEncoder::getR()
 
 
 
-
-
-

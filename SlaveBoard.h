@@ -24,6 +24,3 @@ class SlaveBoard : public Serial {
 };
 
 
-
-
-

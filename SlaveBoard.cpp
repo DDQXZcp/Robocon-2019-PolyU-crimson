@@ -82,6 +82,3 @@ void SlaveBoard::toggleVS()
     putc('Y');    
 }
 
-
-
-
