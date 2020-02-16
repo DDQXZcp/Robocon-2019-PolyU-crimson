@@ -60,7 +60,114 @@ Company myCompany;
 The hierarchy: Position = pointInfo < points = targetPos
 
 ## Slave board
+In odomUpdate()
+~~~
+void SlaveBoard::homing()
+{
+    putc('H');
+}
 
+case 'H':
+        hft.homing(true); //Stop at -------|----- [HF]
+        break;
+~~~
+
+~~~
+void SlaveBoard::readyPosition()
+{
+    putc('R');
+}
+
+case 'R':
+            hft.ready(true); //Stop at -------|----- [HF]
+            break;
+~~~
+~~~
+void SlaveBoard::toggleVG()
+{
+    putc('I');    
+}
+
+case 'I':
+            airt.toggleGeorgeMove(); // toggle george moveup and down [G] //PB_0
+            break;
+~~~
+Tri
+~~~
+void rise_func_TRI(){
+    slave.vesc();
+}
+~~~
+CIR
+~~~
+void rise_func_CIR(){
+    slave.fire();
+}
+~~~
+~~~
+void SlaveBoard::vesc()
+{
+    putc('V');
+}
+case 'V':
+            printf("VSC!!!\n");
+            hft.vsc(0); // Pull the trigger [HF]
+            break;
+~~~
+CRO
+~~~
+void rise_func_CRO(){
+    slave.charge();
+}
+~~~
+~~~
+void SlaveBoard::charge()
+{
+    putc('C');
+}
+
+case 'C':
+            hft.charge(true); //Stop at ------------| [HF]
+            break;
+~~~
+SQU
+~~~
+void rise_func_SQU(){
+    slave.homing();
+}
+~~~
+rise_func_DOWN()
+~~~
+void rise_func_DOWN(){
+    slave.toggleVS();
+}
+~~~
+~~~
+void SlaveBoard::toggleVS()
+{
+    putc('Y');    
+}
+
+airt.toggleMove(); //toggle move up and down. [S] //PC_2 up, PC_3 down
+            
+            break;
+~~~
+rise_func_LEFT()
+~~~
+void rise_func_LEFT(){
+    slave.toggleHS();
+}
+~~~
+~~~
+void SlaveBoard::toggleHS()
+{
+    putc('X');    
+}
+
+case 'X':
+            airt.toggleC(); //toggle openC and closeC. [S] //PA_4 close , PC_0 open
+            break;
+~~~
 ## Manual mode
 
 ### configuration
