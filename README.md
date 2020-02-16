@@ -63,6 +63,8 @@ The hierarchy: Position = pointInfo < points = targetPos
 
 ## Manual mode
 
+### configuration
+
 in main.cpp
 ~~~
 if(autoMode == false)
@@ -154,3 +156,78 @@ bool SET_QUICK_STOP_DECELERATION(uint8_t node_num, uint32_t data)
     return 1;
 }
 ~~~
+
+### Set motor velocity
+
+in main.cpp
+~~~
+void inverse(float vx, float vy, float w)
+{ 
+    int maxPVelocity = motor.getMaxPVelocity();
+    motor1 = constrain(int((1 / wheelR) * (vx - vy - (lx + ly) * w) * radian_to_rpm_convert) , -maxPVelocity, maxPVelocity);
+    motor2 = constrain(int((1 / wheelR) * (vx + vy + (lx + ly) * w) * radian_to_rpm_convert) , -maxPVelocity, maxPVelocity);
+    motor3 = constrain(int((1 / wheelR) * (vx + vy - (lx + ly) * w) * radian_to_rpm_convert) , -maxPVelocity, maxPVelocity);
+    motor4 = constrain(int((1 / wheelR) * (vx - vy + (lx + ly) * w) * radian_to_rpm_convert) , -maxPVelocity, maxPVelocity);
+}
+~~~
+You have to know that, constrain is not an function, but a #define
+
+in common.h
+~~~
+// Functions
+#define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
+~~~
+
+in motor.cpp
+~~~
+int Motor::getMaxPVelocity()
+{
+    return maxPVelocity;
+}
+~~~
+
+There is also a motor.update()
+~~~
+void motorUpdate()
+{
+    //motor.update(motor1, motor2, motor3, motor4);
+    // PS4 function
+    //checkFlatLoop();
+}
+~~~
+~~~
+void Motor::update(int motor1, int motor2, int motor3, int motor4) {
+    /*
+    SET_TARGET_VELOCITY(1, motor1*-1);
+    SET_TARGET_VELOCITY(2, motor2);
+    SET_TARGET_VELOCITY(3, motor3*-1);
+    SET_TARGET_VELOCITY(4, motor4);
+    */
+    SET_TARGET_VELOCITY(1, motor1);
+    SET_TARGET_VELOCITY(2, motor2 * -1);
+    SET_TARGET_VELOCITY(3, motor3);
+    SET_TARGET_VELOCITY(4, motor4 * -1);
+
+    wait(0.002);
+    RPDO1_EXE(1, SWITCH_ON_ENABLE_OP);
+    RPDO1_EXE(2, SWITCH_ON_ENABLE_OP);
+    RPDO1_EXE(3, SWITCH_ON_ENABLE_OP);
+    RPDO1_EXE(4, SWITCH_ON_ENABLE_OP);
+    wait(0.002);
+}
+~~~
+
+For maxPVelocity, in motor.h
+~~~
+lass Motor {
+    public:
+        void init();
+        void update(int motor1, int motor2, int motor3, int motor4);
+        void manual();
+        int getMaxPVelocity();
+        Motor();
+    private:
+        static const int maxPVelocity = 8700;
+};
+~~~
+maxPVelocity = 8700, it is a key that needs to modify in actual use
