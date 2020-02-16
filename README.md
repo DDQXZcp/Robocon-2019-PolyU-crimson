@@ -232,7 +232,7 @@ lass Motor {
 ~~~
 maxPVelocity = 8700, it is a key parameter that needs to modify in actual use
 
-Also, in PS4_command.cpp, there is a function of checkFlatLoop
+Also, in PS4_command.cpp, there is a function of checkFlatLoop() to update the command
 ~~~
 void checkFlatLoop()
     {
