@@ -231,3 +231,22 @@ lass Motor {
 };
 ~~~
 maxPVelocity = 8700, it is a key parameter that needs to modify in actual use
+
+Also, in PS4_command.cpp, there is a function of checkFlatLoop
+~~~
+void checkFlatLoop()
+    {
+        if(CommandFlat[CommandChange] != old_CommandFlat[CommandChange] || CommandFlat[CommandChange])
+            SetFlat();
+        
+        for(int i = 0; i < 19; i++)
+        {
+            if(CommandFlat[i] && !old_CommandFlat[i])
+                (*ps4rise_func_ptr[i])();
+            if(!CommandFlat[i] && old_CommandFlat[i])
+                (*ps4fall_func_ptr[i])(); 
+            if(CommandFlat[i])
+                (*ps4high_func_ptr[i])();
+            if(!CommandFlat[i])
+                (*ps4low_func_ptr[i])();
+~~~
